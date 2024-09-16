@@ -34,4 +34,33 @@ public class AccountService {
 
         return this.accountDAO.createAccount(account);
     }
+
+    public Account loginAccount(Account account){    
+        String username = account.getUsername();
+        String password = account.getPassword();
+        System.out.println(account.getAccount_id());
+        System.out.println("Login: provided account username:");
+        System.out.println(username);
+        System.out.println("Login: provided account pass:");
+        System.out.println(password);
+        if(username.isEmpty() || username == null || password.isEmpty() || password ==null){
+            return null;
+        }
+        Account existingAccount = accountDAO.getAccount(account);
+        if(existingAccount != null){ 
+            System.out.println("Login: got the existing account by id or usernmae.");
+            if(existingAccount.getUsername().equals(username) && existingAccount.getPassword().equals(password)){
+                return existingAccount;
+            }else{
+                System.out.println("Login: account username and pass are not matched.");    
+                System.out.println(existingAccount.getUsername());
+                System.out.println(username);
+                System.out.println(existingAccount.getPassword());
+                System.out.println(password);
+            }
+        }else{
+            System.out.println("LoginService: provided account is not in the databse.");
+        }
+        return null;
+    }
 }

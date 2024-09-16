@@ -25,12 +25,13 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register", this::registerHandler);
+        app.post("/login", this::loginHandler);
 
         return app;
     }
 
     /**
-     * This is an example handler for an example endpoint.
+     * This is an regsiter handler for an endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void registerHandler(Context context) throws  JsonProcessingException {
@@ -44,5 +45,19 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * This is an login handler for an endpoint.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void loginHandler(Context context) throws  JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(context.body(), Account.class);
+        Account loginAccount = accountService.loginAccount(account);
+        if(loginAccount==null){
+            context.status(401);
+        }else{
+            context.json(mapper.writeValueAsString(loginAccount));
+        }
+    }
 
 }
