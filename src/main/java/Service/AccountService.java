@@ -2,7 +2,6 @@ package Service;
 
 import DAO.AccountDAO;
 import Model.Account;
-import java.sql.*;
 
 public class AccountService {
     
@@ -16,6 +15,14 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
 
+    public Account get_account_byID(int id){
+        return accountDAO.getAccount_byID(id);
+    }
+
+    public Account get_account_byUserName(String userName){
+        return accountDAO.getAccount_byUserName(userName);
+    }
+
     public Account createAccount(Account account){
         // the username is not blank, the password is at least 4 characters long 
         
@@ -27,7 +34,7 @@ public class AccountService {
         }
         
         // an Account with that username does not already exist. 
-        Account existingAccount = accountDAO.getAccount(account);
+        Account existingAccount = get_account_byUserName(account.getUsername());
         if(existingAccount != null){ //not null means duplicated username or user id
             return null;
         }
@@ -46,7 +53,7 @@ public class AccountService {
         if(username.isEmpty() || username == null || password.isEmpty() || password ==null){
             return null;
         }
-        Account existingAccount = accountDAO.getAccount(account);
+        Account existingAccount = get_account_byUserName(account.getUsername());
         if(existingAccount != null){ 
             System.out.println("Login: got the existing account by id or usernmae.");
             if(existingAccount.getUsername().equals(username) && existingAccount.getPassword().equals(password)){
